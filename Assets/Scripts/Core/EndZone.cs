@@ -4,12 +4,11 @@ using UnityEngine;
 using Runner.Managers;
 
 namespace Runner.Core {
-    public class DeathZone : MonoBehaviour
+    public class EndZone : MonoBehaviour
     {
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Player")) {
-                print("Player Detected");
-                GameManager.Instance.currentState = GameManager.GameState.Finish;
+                GameManager.Instance.currentState = GameManager.GameState.Scoring;
             }
         }
     }

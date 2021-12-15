@@ -6,13 +6,86 @@ using Runner.Managers;
 namespace Runner.Movement {
     public class Mover : MonoBehaviour
     {
-        [SerializeField] private float speed = 5f;
+        [SerializeField] private float speed = 10f;
+        [SerializeField] private float ropeSpring = 4f;
+        [SerializeField] private float stopSpeed = 2f;
+
+        public bool isMoving = true;
+        private LineRenderer lineRenderer;
+        private SpringJoint ropeJoint;
+        private Vector3 ropeAnchor;
+        private bool isHanging = false;
+
+        void Start() {
+            ropeJoint = GetComponent<SpringJoint>();
+            lineRenderer = GetComponent<LineRenderer>();
+        }
 
         void Update()
         {
-            if (GameManager.Instance.currentState != GameManager.GameState.Playing) return;
-            
+            switch (GameManager.Instance.currentState) {
+                case GameManager.GameState.Scoring:
+                    speed = Mathf.Lerp(speed, 0, stopSpeed * Time.deltaTime);
+                    UpdatePosition();
+                    if (isHanging) {
+                        HandleRope();
+                        Invoke("ResetRope", 1f);
+                    }
+                    break;
+                case GameManager.GameState.Playing:
+                    UpdatePosition();
+                    HandleRope();
+                    break;
+                default:
+                    return;
+            }
+        }
+
+        private void UpdatePosition() {
+            if (!isMoving) return;
             transform.position += Vector3.forward * speed * Time.deltaTime;
+        }
+
+        void HandleRope() {
+            if (GameManager.Instance.ropeUses > 0 && !isHanging && Input.GetMouseButtonDown(0)) {
+                RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
+                foreach (RaycastHit hitInfo in hits) {
+                    if (!hitInfo.transform.CompareTag("CanGrapple")) continue;
+                    // We use  the center of the object hit to simplify gameplay, every round should play very similarly
+                    Vector3 hitCenter = hitInfo.transform.position;
+                    ropeAnchor = new Vector3(transform.position.x, hitCenter.y, hitCenter.z);
+                    ThrowRope();
+                }
+            }
+            if (isHanging) {
+                RenderRope();
+                if (Input.GetMouseButtonUp(0)) {
+                    ResetRope();
+                }
+            }
+        }
+
+        void RenderRope() {
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, ropeAnchor);
+        }
+
+        void ThrowRope() {
+            ropeJoint.connectedAnchor = ropeAnchor;
+            ropeJoint.spring = ropeSpring;
+            isHanging = true;
+            GameManager.Instance.ropeUses--;
+        }
+
+        void ResetRope() {
+            ropeJoint.spring = 0f;
+            isHanging = false;
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, transform.position);
+        }
+
+        static Ray GetMouseRay() {
+            return Camera.main.ScreenPointToRay(Input.mousePosition);
         }
     }
 }
