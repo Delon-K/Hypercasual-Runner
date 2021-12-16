@@ -8,7 +8,7 @@ namespace Runner.Movement {
     {
         [SerializeField] private float speed = 10f;
         [SerializeField] private float ropeSpring = 4f;
-        [SerializeField] private float stopSpeed = 2f;
+        [SerializeField] private float stopSpeed = 5f;
 
         public bool isMoving = true;
         private LineRenderer lineRenderer;
@@ -51,9 +51,9 @@ namespace Runner.Movement {
                 RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
                 foreach (RaycastHit hitInfo in hits) {
                     if (!hitInfo.transform.CompareTag("CanGrapple")) continue;
-                    // We use  the center of the object hit to simplify gameplay, every round should play very similarly
+                    // We use height center of the object hit to simplify player choice
                     Vector3 hitCenter = hitInfo.transform.position;
-                    ropeAnchor = new Vector3(transform.position.x, hitCenter.y, hitCenter.z);
+                    ropeAnchor = new Vector3(transform.position.x, hitCenter.y, hitInfo.point.z);
                     ThrowRope();
                 }
             }

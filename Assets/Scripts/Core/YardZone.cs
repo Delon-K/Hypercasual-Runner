@@ -4,7 +4,7 @@ using UnityEngine;
 using Runner.Managers;
 
 namespace Runner.Core {
-    public class EndZone : MonoBehaviour
+    public class YardZone : MonoBehaviour
     {
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Player")) {

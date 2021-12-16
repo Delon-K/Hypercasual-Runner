@@ -13,10 +13,8 @@ namespace Runner.Managers {
         private static GameManager _instance;
         public static GameManager Instance
         {
-            get
-            {
-                if (_instance == null)
-                {
+            get {
+                if (_instance == null) {
                     GameObject go = new GameObject("GameManager");
                     go.AddComponent<GameManager>();
                 }
@@ -24,8 +22,7 @@ namespace Runner.Managers {
             }
         }
 
-        void Awake()
-        {
+        void Awake() {
             _instance = this;
         }
 
