@@ -9,7 +9,7 @@ namespace Runner.Core {
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Player")) {
                 print("Player Detected");
-                GameManager.Instance.currentState = GameManager.GameState.Finish;
+                GameManager.Instance.ChangeState(GameState.Lost);
             }
         }
     }

@@ -12,8 +12,8 @@ namespace Runner.Core {
         private void OnTriggerStay(Collider other) {
             if (!hasScored && other.gameObject.CompareTag("Player") && other.GetComponent<Rigidbody>().velocity.magnitude == 0) {
                 hasScored = true;
-                GameManager.Instance.score += extraScore;
-                GameManager.Instance.currentState = GameManager.GameState.Finish;
+                GameManager.Instance.AddScore(extraScore);
+                GameManager.Instance.ChangeState(GameState.Won);
             }
         }
     }

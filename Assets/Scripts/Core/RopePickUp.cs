@@ -9,7 +9,7 @@ namespace Runner.Core {
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Player")) {
                 print("Player Picks Rope");
-                GameManager.Instance.ropeUses++;
+                GameManager.Instance.AddRope(1);
                 Destroy(gameObject);
             }
         }

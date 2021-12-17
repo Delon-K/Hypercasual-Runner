@@ -24,15 +24,15 @@ namespace Runner.Movement {
         void Update()
         {
             switch (GameManager.Instance.currentState) {
-                case GameManager.GameState.Scoring:
+                case GameState.Scoring:
                     speed = Mathf.Lerp(speed, 0, stopSpeed * Time.deltaTime);
                     UpdatePosition();
-                    if (isHanging) {
-                        HandleRope();
-                        Invoke("ResetRope", 1f);
-                    }
+                    HandleRope();
+
+                    // We force the rope to break in the yard stick portion of the game
+                    if (isHanging) Invoke("ResetRope", 1f);
                     break;
-                case GameManager.GameState.Playing:
+                case GameState.Playing:
                     UpdatePosition();
                     HandleRope();
                     break;
@@ -74,10 +74,12 @@ namespace Runner.Movement {
             ropeJoint.connectedAnchor = ropeAnchor;
             ropeJoint.spring = ropeSpring;
             isHanging = true;
-            GameManager.Instance.ropeUses--;
+            GameManager.Instance.ReduceRope(1);
         }
 
         void ResetRope() {
+            if (!isHanging) return;
+
             ropeJoint.spring = 0f;
             isHanging = false;
             lineRenderer.SetPosition(0, transform.position);

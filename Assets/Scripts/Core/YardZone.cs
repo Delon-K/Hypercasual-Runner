@@ -8,7 +8,7 @@ namespace Runner.Core {
     {
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Player")) {
-                GameManager.Instance.currentState = GameManager.GameState.Scoring;
+                GameManager.Instance.ChangeState(GameState.Scoring);
             }
         }
     }

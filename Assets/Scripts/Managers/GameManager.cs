@@ -3,13 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameState { 
+    Start,
+    Playing,
+    Scoring,
+    Lost,
+    Won 
+}
+
 namespace Runner.Managers {
     public class GameManager : MonoBehaviour
     {
-        public enum GameState { Start, Playing, Scoring, Finish };
         public GameState currentState;
         public int ropeUses = 0;
         public float score = 1000;
+        public float scoreMultiplier = 2f;
+
+        public delegate void GameStateChange(GameState newState);
+        public event GameStateChange OnGameStateChange;
         private static GameManager _instance;
         public static GameManager Instance
         {
@@ -27,20 +38,66 @@ namespace Runner.Managers {
         }
 
         void Start() {
-            currentState = GameState.Start;
+            ChangeState(GameState.Start);
         }
 
         void Update() {
-            if (currentState == GameState.Start && Input.GetKeyDown(KeyCode.S)) currentState = GameState.Playing;
-            if (currentState == GameState.Finish && Input.GetKeyDown(KeyCode.R)) ReloadScene();
+            if (currentState == GameState.Start && Input.GetMouseButtonDown(0)) ChangeState(GameState.Playing);
 
             if (currentState == GameState.Playing) {
-                score -= Time.deltaTime;
+                ReduceScore(Time.deltaTime * scoreMultiplier);
             }
         }
 
-        void ReloadScene() {
+        public void ReloadScene() {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public float AddScore(float amount) {
+            score += amount;
+            UIManager.Instance.UpdateScoreText(score);
+            return score;
+        }
+
+        public float ReduceScore(float amount) {
+            score -= amount;
+            UIManager.Instance.UpdateScoreText(score);
+            return score;
+        }
+
+        public int AddRope(int amount) {
+            ropeUses += amount;
+            UIManager.Instance.UpdateRopeText(ropeUses);
+            return ropeUses;
+        }
+
+        public int ReduceRope(int amount) {
+            ropeUses -= amount;
+            UIManager.Instance.UpdateRopeText(ropeUses);
+            return ropeUses;
+        }
+
+        public void ChangeState(GameState newState) {
+            currentState = newState;
+
+            switch (currentState) {
+                case GameState.Start:
+                    break;
+                case GameState.Playing:
+                    break;
+                case GameState.Scoring:
+                    break;
+                case GameState.Won:
+                    break;
+                case GameState.Lost:
+                    break;
+                default:
+                    throw new System.ArgumentOutOfRangeException(nameof(currentState), newState, null);
+            }
+        
+            if (null != OnGameStateChange) {
+                OnGameStateChange(currentState);
+            }
         }
     }
 }
