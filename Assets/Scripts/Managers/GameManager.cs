@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public enum GameState { 
+    MainMenu,
     Start,
     Playing,
     Scoring,
@@ -18,27 +19,40 @@ namespace Runner.Managers {
         public int ropeUses = 0;
         public float score = 1000;
         public float scoreMultiplier = 2f;
-
+        
         public delegate void GameStateChange(GameState newState);
         public event GameStateChange OnGameStateChange;
+        public JsonArray<LevelData> levelsData;
+
+        private int twoStarScore;
+        private int threeStarScore;
         private static GameManager _instance;
-        public static GameManager Instance
-        {
-            get {
-                if (_instance == null) {
-                    GameObject go = new GameObject("GameManager");
-                    go.AddComponent<GameManager>();
-                }
-                return _instance;
-            }
-        }
+        public static GameManager Instance { get { return _instance; } }
 
         void Awake() {
-            _instance = this;
+            if (_instance != null && _instance != this) {
+                Destroy(this.gameObject);
+            } 
+            else _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+
+            levelsData = JsonReader.ReadLevelsFromResources();
         }
 
         void Start() {
-            ChangeState(GameState.Start);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+            if (scene.name == "MainMenu") ChangeState(GameState.MainMenu);
+            else {
+                score = 1000;
+                ropeUses = 0;
+                LevelData levelData = System.Array.Find(levelsData.Items, levelData => levelData.namePath == scene.name);
+                twoStarScore = levelData.twoStar;
+                threeStarScore = levelData.threeStar;
+                ChangeState(GameState.Start);
+            }
         }
 
         void Update() {
@@ -51,6 +65,27 @@ namespace Runner.Managers {
 
         public void ReloadScene() {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void LoadSceneByName(string name) {
+            SceneManager.LoadScene(name);
+        }
+
+        public void LoadNextScene() {
+            LoadSceneByName(FindNextStageLevel().namePath);
+        }
+
+        public LevelData FindNextStageLevel() {
+            LevelData currentLevelData = System.Array.Find(levelsData.Items, levelData => levelData.namePath == SceneManager.GetActiveScene().name);
+            if (null == currentLevelData) return null;
+
+            LevelData nextLevelData = System.Array.Find(levelsData.Items, (levelData => levelData.levelNumber == currentLevelData.levelNumber + 1));
+            if (null == nextLevelData) return null;
+            else return nextLevelData;
+        }
+
+        public System.Tuple<int, int> GetLevelScores() {
+            return System.Tuple.Create(twoStarScore, threeStarScore);
         }
 
         public float AddScore(float amount) {
@@ -79,22 +114,6 @@ namespace Runner.Managers {
 
         public void ChangeState(GameState newState) {
             currentState = newState;
-
-            switch (currentState) {
-                case GameState.Start:
-                    break;
-                case GameState.Playing:
-                    break;
-                case GameState.Scoring:
-                    break;
-                case GameState.Won:
-                    break;
-                case GameState.Lost:
-                    break;
-                default:
-                    throw new System.ArgumentOutOfRangeException(nameof(currentState), newState, null);
-            }
-        
             if (null != OnGameStateChange) {
                 OnGameStateChange(currentState);
             }

@@ -1,0 +1,26 @@
+[
+    {
+        "namePath": "FirstLevel",
+        "levelNumber": "1",
+        "twoStar": "50",
+        "threeStar": "75"
+    },
+    {
+        "namePath": "SecondLevel",
+        "levelNumber": "2",
+        "twoStar": "50",
+        "threeStar": "75"
+    },
+    {
+        "namePath": "ThirdLevel",
+        "levelNumber": "3",
+        "twoStar": "50",
+        "threeStar": "75"
+    },
+    {
+        "namePath": "FourthLevel",
+        "levelNumber": "4",
+        "twoStar": "50",
+        "threeStar": "75"
+    }
+]

@@ -2,31 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Runner.UI;
-using System;
 
 namespace Runner.Managers {
     public class UIManager : MonoBehaviour
     {
         private LevelUI levelUI;
+        private MainMenuUI mainMenuUI;
+        
         private static UIManager _instance;
-        public static UIManager Instance
-        {
-            get {
-                if (_instance == null) {
-                    GameObject go = new GameObject("UIManager");
-                    go.AddComponent<UIManager>();
-                }
-                return _instance;
-            }
-        }
+        public static UIManager Instance { get { return _instance; } }
 
         void Awake() {
-            _instance = this;
+            if (_instance != null && _instance != this) {
+                Destroy(this.gameObject);
+            } 
+            else _instance = this;
         }
 
         void Start() {
-            levelUI = GetComponent<LevelUI>();
             GameManager.Instance.OnGameStateChange += GameManagerOnGameStateChange;
+            levelUI = GetComponent<LevelUI>();
+            mainMenuUI = GetComponent<MainMenuUI>();
+            mainMenuUI?.MainMenuLoaded(GameManager.Instance.levelsData);
         }
 
         void OnDestroy() {
@@ -35,7 +32,11 @@ namespace Runner.Managers {
 
         private void GameManagerOnGameStateChange(GameState newState) {
             switch (newState) {
+                case GameState.MainMenu:
+                    mainMenuUI.MainMenuLoaded(GameManager.Instance.levelsData);
+                    break;
                 case GameState.Start:
+                    levelUI.LevelLoaded(GameManager.Instance.GetLevelScores());
                     break;
                 case GameState.Playing:
                     levelUI.LevelStarted();
@@ -43,7 +44,8 @@ namespace Runner.Managers {
                 case GameState.Scoring:
                     break;
                 case GameState.Won:
-                    levelUI.LevelFinished(true, GameManager.Instance.score);
+                    bool hasNextLevel = (null != GameManager.Instance.FindNextStageLevel());
+                    levelUI.LevelFinished(true, GameManager.Instance.score, hasNextLevel);
                     break;
                 case GameState.Lost:
                     levelUI.LevelFinished(false, GameManager.Instance.score);
@@ -59,6 +61,23 @@ namespace Runner.Managers {
 
         public void UpdateRopeText(int ropeUses) {
             levelUI.UpdateRopeText(ropeUses);
+        }
+
+        public void LoadSceneFromMenu(bool isFirst) {
+            LevelData levelClicked = mainMenuUI.GetLevelShownByPosition(isFirst);
+            GameManager.Instance.LoadSceneByName(levelClicked.namePath);
+        }
+
+        public void LoadNextStage() {
+            GameManager.Instance.LoadNextScene();
+        }
+
+        public void LoadMainMenu() {
+            GameManager.Instance.LoadSceneByName("MainMenu");
+        }
+
+        public void ReloadScene() {
+            GameManager.Instance.ReloadScene();
         }
     }
 }
