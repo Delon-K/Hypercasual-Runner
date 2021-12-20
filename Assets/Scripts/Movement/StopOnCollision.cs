@@ -10,20 +10,10 @@ namespace Runner.Movement {
         // And we also add a little force backwards to separate player and platform        
         private void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Player")) {
-                StartCoroutine(UpdatePlayerMoving(other.gameObject, false, 0f));
-                other.GetComponent<Rigidbody>().AddForce(Vector3.back);
+                // StartCoroutine(UpdatePlayerMoving(other.gameObject, false));
+                other.GetComponent<Rigidbody>().AddForce(Vector3.back * 20f);
+                other.GetComponent<Mover>().OnCollision();
             }
-        }
-
-        private void OnTriggerExit(Collider other) {
-            if (other.gameObject.CompareTag("Player")) {
-                StartCoroutine(UpdatePlayerMoving(other.gameObject, true, 0.25f));
-            }
-        }
-
-        IEnumerator UpdatePlayerMoving(GameObject player, bool newMoving, float delay) {
-            yield return new WaitForSeconds(delay);
-            player.GetComponent<Mover>().isMoving = newMoving;
         }
     }
 }

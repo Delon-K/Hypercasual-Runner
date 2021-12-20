@@ -17,11 +17,13 @@ namespace Runner.Managers {
     {
         public GameState currentState;
         public int ropeUses = 0;
-        public float score = 1000;
+        public float score = 100;
         public float scoreMultiplier = 2f;
         
         public delegate void GameStateChange(GameState newState);
         public event GameStateChange OnGameStateChange;
+        public delegate void RopeUsesChange(int currentUses);
+        public event RopeUsesChange OnRopeUsesChange;
         public JsonArray<LevelData> levelsData;
 
         private int twoStarScore;
@@ -46,7 +48,8 @@ namespace Runner.Managers {
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.name == "MainMenu") ChangeState(GameState.MainMenu);
             else {
-                score = 1000;
+                Debug.Log("Scene loaded");
+                score = 100;
                 ropeUses = 0;
                 LevelData levelData = System.Array.Find(levelsData.Items, levelData => levelData.namePath == scene.name);
                 twoStarScore = levelData.twoStar;
@@ -75,6 +78,10 @@ namespace Runner.Managers {
             LoadSceneByName(FindNextStageLevel().namePath);
         }
 
+        public void CloseGame() {
+            Application.Quit();
+        }
+
         public LevelData FindNextStageLevel() {
             LevelData currentLevelData = System.Array.Find(levelsData.Items, levelData => levelData.namePath == SceneManager.GetActiveScene().name);
             if (null == currentLevelData) return null;
@@ -90,29 +97,33 @@ namespace Runner.Managers {
 
         public float AddScore(float amount) {
             score += amount;
-            UIManager.Instance.UpdateScoreText(score);
             return score;
         }
 
         public float ReduceScore(float amount) {
             score -= amount;
-            UIManager.Instance.UpdateScoreText(score);
             return score;
         }
 
         public int AddRope(int amount) {
             ropeUses += amount;
-            UIManager.Instance.UpdateRopeText(ropeUses);
+            if (null != OnGameStateChange) {
+                OnRopeUsesChange(ropeUses);
+            }
             return ropeUses;
         }
 
         public int ReduceRope(int amount) {
             ropeUses -= amount;
-            UIManager.Instance.UpdateRopeText(ropeUses);
+            if (null != OnGameStateChange) {
+                OnRopeUsesChange(ropeUses);
+            }
             return ropeUses;
         }
 
         public void ChangeState(GameState newState) {
+            if (newState == currentState) return;
+
             currentState = newState;
             if (null != OnGameStateChange) {
                 OnGameStateChange(currentState);

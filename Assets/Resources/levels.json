@@ -2,25 +2,25 @@
     {
         "namePath": "FirstLevel",
         "levelNumber": "1",
-        "twoStar": "50",
-        "threeStar": "75"
+        "twoStar": "150",
+        "threeStar": "180"
     },
     {
         "namePath": "SecondLevel",
         "levelNumber": "2",
-        "twoStar": "50",
-        "threeStar": "75"
+        "twoStar": "120",
+        "threeStar": "150"
     },
     {
         "namePath": "ThirdLevel",
         "levelNumber": "3",
-        "twoStar": "50",
-        "threeStar": "75"
+        "twoStar": "150",
+        "threeStar": "180"
     },
     {
         "namePath": "FourthLevel",
         "levelNumber": "4",
-        "twoStar": "50",
-        "threeStar": "75"
+        "twoStar": "120",
+        "threeStar": "150"
     }
 ]

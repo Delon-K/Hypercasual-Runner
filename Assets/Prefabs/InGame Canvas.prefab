@@ -495,8 +495,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 927556648556486852}
-        m_TargetAssemblyTypeName: Runner.Managers.UIManager, Assembly-CSharp
+      - m_Target: {fileID: 5533998646350548781}
+        m_TargetAssemblyTypeName: Runner.UI.LevelUI, Assembly-CSharp
         m_MethodName: ReloadScene
         m_Mode: 1
         m_Arguments:
@@ -507,71 +507,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!1 &4407495573833952545
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6557067752921798351}
-  - component: {fileID: 927556648556486852}
-  - component: {fileID: 2562397036579793111}
-  m_Layer: 5
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6557067752921798351
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4407495573833952545}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 9130878657757099321}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &927556648556486852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4407495573833952545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31245c2931a1bc243af88cb0d6e13bef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2562397036579793111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4407495573833952545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4efdce37cc0500f45a3167443bc8154f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 9130878659803644084}
-  startPanel: {fileID: 9130878657814741227}
-  winLosePanel: {fileID: 9130878658636633828}
-  ropeText: {fileID: 9130878658590247721}
-  twoStarFail: {fileID: 1443576139}
-  twoStarWin: {fileID: 1126125834}
-  threeStarFail: {fileID: 832924230}
-  threeStarWin: {fileID: 1762772274}
-  nextLevelButton: {fileID: 9130878658484546835}
 --- !u!1 &5992989688572405360
 GameObject:
   m_ObjectHideFlags: 0
@@ -692,8 +627,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 927556648556486852}
-        m_TargetAssemblyTypeName: Runner.Managers.UIManager, Assembly-CSharp
+      - m_Target: {fileID: 5533998646350548781}
+        m_TargetAssemblyTypeName: Runner.UI.LevelUI, Assembly-CSharp
         m_MethodName: LoadMainMenu
         m_Mode: 1
         m_Arguments:
@@ -716,6 +651,7 @@ GameObject:
   - component: {fileID: 9130878657757099320}
   - component: {fileID: 9130878657757099327}
   - component: {fileID: 9130878657757099326}
+  - component: {fileID: 5533998646350548781}
   m_Layer: 5
   m_Name: InGame Canvas
   m_TagString: Untagged
@@ -738,7 +674,6 @@ RectTransform:
   - {fileID: 9130878658590247720}
   - {fileID: 9130878657814741220}
   - {fileID: 9130878658636633829}
-  - {fileID: 6557067752921798351}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -808,6 +743,27 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &5533998646350548781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9130878657757099325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4efdce37cc0500f45a3167443bc8154f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 9130878659803644084}
+  startPanel: {fileID: 9130878657814741227}
+  winLosePanel: {fileID: 9130878658636633828}
+  ropeText: {fileID: 9130878658590247721}
+  twoStarFail: {fileID: 1443576139}
+  twoStarWin: {fileID: 1126125834}
+  threeStarFail: {fileID: 832924230}
+  threeStarWin: {fileID: 1762772274}
+  nextLevelButton: {fileID: 9130878658484546835}
 --- !u!1 &9130878657760735999
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,8 +1180,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 927556648556486852}
-        m_TargetAssemblyTypeName: Runner.Managers.UIManager, Assembly-CSharp
+      - m_Target: {fileID: 5533998646350548781}
+        m_TargetAssemblyTypeName: Runner.UI.LevelUI, Assembly-CSharp
         m_MethodName: LoadNextStage
         m_Mode: 1
         m_Arguments:

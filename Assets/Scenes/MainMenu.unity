@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   ropeUses: 0
-  score: 1000
+  score: 100
   scoreMultiplier: 2
   levelsData:
     Items: []

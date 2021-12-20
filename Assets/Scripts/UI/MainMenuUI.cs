@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Runner.Managers;
 
 namespace Runner.UI {
-    [RequireComponent(typeof(Runner.Managers.UIManager))]
     public class MainMenuUI : MonoBehaviour
     {
         [SerializeField] private int pageSize = 2;
@@ -18,6 +18,10 @@ namespace Runner.UI {
         private JsonArray<LevelData> levelDataList;
         private LevelData firstLevelData;
         private LevelData secondLevelData;
+
+        private void Start() {
+            MainMenuLoaded(GameManager.Instance.levelsData);
+        }
 
         public void MainMenuLoaded(JsonArray<LevelData> levels) {
             levelDataList = levels;
@@ -44,8 +48,13 @@ namespace Runner.UI {
             }
         }
 
-        public LevelData GetLevelShownByPosition(bool isFirst) {
-            return isFirst ? firstLevelData : secondLevelData;
+        public void LoadSceneFromMenu(bool isFirst) {
+            LevelData levelClicked = isFirst ? firstLevelData : secondLevelData;
+            GameManager.Instance.LoadSceneByName(levelClicked.namePath);
+        }
+
+        public void ExitButton() {
+            GameManager.Instance.CloseGame();
         }
     }
 }
