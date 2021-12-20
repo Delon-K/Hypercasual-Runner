@@ -98,7 +98,7 @@ namespace Runner.UI {
                 threeStarFail.gameObject.SetActive(false);
                 threeStarWin.gameObject.SetActive(true);
             }
-            if (hasNextLevel) {
+            if (hasNextLevel && hasWon) {
                 nextLevelButton.gameObject.SetActive(true);
             }
             winLosePanel.GetComponentInChildren<Text>().text = Mathf.Round(finalScore).ToString();

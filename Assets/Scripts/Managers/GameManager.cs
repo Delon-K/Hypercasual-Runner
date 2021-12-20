@@ -43,6 +43,7 @@ namespace Runner.Managers {
 
         void Start() {
             SceneManager.sceneLoaded += OnSceneLoaded;
+            DisableAutoRotation();
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -64,6 +65,12 @@ namespace Runner.Managers {
             if (currentState == GameState.Playing) {
                 ReduceScore(Time.deltaTime * scoreMultiplier);
             }
+        }
+
+        void DisableAutoRotation() {
+            Screen.autorotateToPortrait = false;
+            Screen.autorotateToPortraitUpsideDown = false;
+            Screen.orientation = ScreenOrientation.Landscape;
         }
 
         public void ReloadScene() {
